@@ -1,2 +1,9 @@
 mlruns/
 mlflow.db
+
+__pycache__/
+.vscode/
+venv/
+mlruns/
+mlflow.db
+model/
