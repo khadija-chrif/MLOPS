@@ -5,3 +5,4 @@ mlruns/
 mlflow.db
 model/
 s5-docker-demo/
+.vscode/
