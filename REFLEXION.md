@@ -1,21 +1,28 @@
-## TP3 - Suivi des experiences avec MLflow
 
-### 1. Quel est le meilleur modele ? Peux-tu le prouver ?
-L'Essai 1 et l'Essai 3 ont obtenu les meilleures performances (F1 = 0.889, Accuracy = 0.99). L'Essai 3 est retenu car il est plus simple et n'utilise pas la variable salaire. MLflow le prouve grace au tri des runs par metrics.f1.
+## TP5 - Docker et Docker Compose
 
-### 2. Peux-tu redonner exactement le modele de l'Essai 1 ?
-Oui, grace a son identifiant de run unique (Run ID) en utilisant la commande mlflow.sklearn.load_model("runs:/<RUN_ID>/model").
+### 1. Difference entre une image et un conteneur ?
+L'image est un modele fige en lecture seule (systeme, Python, bibliotheques, code).
+Le conteneur est une instance en cours d'execution de cette image.
 
-### 3. Un camarade peut-il reproduire ton travail sur une autre machine ?
-Le code et les dependances sont conserves via Git et MLflow, mais un environnement identique necessitera Docker (TP5/TP6).
+### 2. Pourquoi installer requirements.txt avant de copier app.py ?
+Pour profiter du cache des couches : le code change souvent, les bibliotheques rarement.
+Une modification de app.py ne relance donc pas pip install.
 
-## TP4 - Registry de modeles et API FastAPI
+### 3. Que se passe-t-il sans l'option -p ?
+L'API tourne dans le conteneur mais le port n'est pas publie : localhost:8000 ne repond pas.
 
-### 1. Comment designer officiellement le modele a utiliser ?
-Avec l'alias @champion (models:/churn-model@champion) dans le Model Registry de MLflow sur la version choisie.
+### 4. Pourquoi http://mlflow:5000 et non localhost:5000 dans Compose ?
+Dans un conteneur, localhost designe le conteneur lui-meme. Compose cree un reseau
+ou chaque service est joignable par son nom.
 
-### 2. Comment une application peut-elle utiliser le modele ?
-En envoyant une requete HTTP POST au format JSON avec les donnees du client vers la route /predict de l'API FastAPI.
+### 5. Difference entre down et down -v ?
+down supprime conteneurs et reseau mais garde les volumes (donnees conservees).
+down -v supprime aussi les volumes : MLflow repart vide.
 
-### 3. Que se passe-t-il quand on change de champion ?
-On deplace l'alias @champion vers la nouvelle version dans le Registry et on redemarre l'API. Le code de l'API et des applications clientes reste inchange.
+### 6. Pourquoi model/ hors de Git alors que le Dockerfile y est ?
+Le Dockerfile est du texte, versionnable. Le modele est un binaire regenerable,
+gere par le Registry MLflow.
+
+### 7. Pourquoi une branche dediee plutot que develop ?
+Pour garder develop stable, isoler les essais et ne fusionner qu'un travail valide.
